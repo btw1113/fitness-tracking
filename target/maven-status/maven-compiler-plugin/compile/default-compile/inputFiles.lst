@@ -1,0 +1,15 @@
+E:\Programs\VS Code Project\fitness-tracking\src\main\java\com\example\fitness_tracking\config\DataLoader.java
+E:\Programs\VS Code Project\fitness-tracking\src\main\java\com\example\fitness_tracking\config\RabbitMQConfig.java
+E:\Programs\VS Code Project\fitness-tracking\src\main\java\com\example\fitness_tracking\controller\ExerciseController.java
+E:\Programs\VS Code Project\fitness-tracking\src\main\java\com\example\fitness_tracking\controller\UserController.java
+E:\Programs\VS Code Project\fitness-tracking\src\main\java\com\example\fitness_tracking\controller\WorkoutController.java
+E:\Programs\VS Code Project\fitness-tracking\src\main\java\com\example\fitness_tracking\entity\Exercise.java
+E:\Programs\VS Code Project\fitness-tracking\src\main\java\com\example\fitness_tracking\entity\FitnessEvent.java
+E:\Programs\VS Code Project\fitness-tracking\src\main\java\com\example\fitness_tracking\entity\User.java
+E:\Programs\VS Code Project\fitness-tracking\src\main\java\com\example\fitness_tracking\entity\Workout.java
+E:\Programs\VS Code Project\fitness-tracking\src\main\java\com\example\fitness_tracking\FitnessTrackingApplication.java
+E:\Programs\VS Code Project\fitness-tracking\src\main\java\com\example\fitness_tracking\repository\ExerciseRepository.java
+E:\Programs\VS Code Project\fitness-tracking\src\main\java\com\example\fitness_tracking\repository\UserRepository.java
+E:\Programs\VS Code Project\fitness-tracking\src\main\java\com\example\fitness_tracking\repository\WorkoutRepository.java
+E:\Programs\VS Code Project\fitness-tracking\src\main\java\com\example\fitness_tracking\service\FitnessEventConsumer.java
+E:\Programs\VS Code Project\fitness-tracking\src\main\java\com\example\fitness_tracking\service\FitnessEventProducer.java
