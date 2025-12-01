@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,12 +29,14 @@ public class ExerciseController {
 
     @GetMapping
     @Operation(summary = "Отримати всі вправи")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TRAINER')")
     public List<Exercise> getAllExercises() {
         return exerciseRepository.findAll();
     }
 
     @GetMapping("/count")
     @Operation(summary = "Отримати кількість вправ")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TRAINER')")
     public ResponseEntity<Long> getExercisesCount() {
         long count = exerciseRepository.count();
         return ResponseEntity.ok(count);
@@ -41,6 +44,7 @@ public class ExerciseController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Отримати вправу по ID")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TRAINER')")
     public ResponseEntity<Exercise> getExerciseById(@PathVariable Long id) {
         Optional<Exercise> exercise = exerciseRepository.findById(id);
         return exercise.map(ResponseEntity::ok)
@@ -49,24 +53,28 @@ public class ExerciseController {
 
     @GetMapping("/type/{type}")
     @Operation(summary = "Отримати вправи по типу")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TRAINER')")
     public List<Exercise> getExercisesByType(@PathVariable Exercise.ExerciseType type) {
         return exerciseRepository.findByType(type);
     }
 
     @GetMapping("/difficulty/{difficulty}")
     @Operation(summary = "Отримати вправи по складності")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TRAINER')")
     public List<Exercise> getExercisesByDifficulty(@PathVariable Exercise.Difficulty difficulty) {
         return exerciseRepository.findByDifficulty(difficulty);
     }
 
     @GetMapping("/calories/{minCalories}")
     @Operation(summary = "Отримати вправи з мінімальною кількістю калорій")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TRAINER')")
     public List<Exercise> getExercisesByMinCalories(@PathVariable Double minCalories) {
         return exerciseRepository.findByCaloriesPerMinuteGreaterThanEqual(minCalories);
     }
 
     @PostMapping
     @Operation(summary = "Створити нову вправу")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TRAINER')")
     public ResponseEntity<Exercise> createExercise(@Valid @RequestBody Exercise exercise) {
         Exercise savedExercise = exerciseRepository.save(exercise);
         fitnessEventProducer.sendExerciseAddedEvent(
@@ -80,6 +88,7 @@ public class ExerciseController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Повністю оновити вправу")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TRAINER')")
     public ResponseEntity<Exercise> updateExercise(@PathVariable Long id, @Valid @RequestBody Exercise exerciseDetails) {
         return exerciseRepository.findById(id)
                 .map(exercise -> {
@@ -95,6 +104,7 @@ public class ExerciseController {
 
     @PatchMapping("/{id}/calories")
     @Operation(summary = "Оновити калорії вправи")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TRAINER')")
     public ResponseEntity<Exercise> updateExerciseCalories(@PathVariable Long id, @RequestParam Double calories) {
         if (calories <= 0) {
             return ResponseEntity.badRequest().build();
@@ -109,6 +119,7 @@ public class ExerciseController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Видалити вправу")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TRAINER')")
     public ResponseEntity<Void> deleteExercise(@PathVariable Long id) {
         return exerciseRepository.findById(id)
                 .map(exercise -> {

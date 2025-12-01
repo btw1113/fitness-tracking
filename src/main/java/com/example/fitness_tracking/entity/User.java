@@ -15,6 +15,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
+    @JsonIgnore
     private Long userId;
 
     @NotBlank(message = "Name is required")
@@ -41,9 +42,11 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "fitness_level")
+    @JsonIgnore
     private FitnessLevel fitnessLevel;
 
     @Column(name = "registration_date")
+    @JsonIgnore
     private LocalDate registrationDate;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

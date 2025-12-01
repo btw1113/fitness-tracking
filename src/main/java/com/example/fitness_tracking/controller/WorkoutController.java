@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -37,12 +38,14 @@ public class WorkoutController {
 
     @GetMapping
     @Operation(summary = "Отримати всі тренування")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TRAINER')")
     public List<Workout> getAllWorkouts() {
         return workoutRepository.findAll();
     }
 
     @GetMapping("/count")
     @Operation(summary = "Отримати кількість тренувань")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TRAINER')")
     public ResponseEntity<Long> getWorkoutsCount() {
         long count = workoutRepository.count();
         return ResponseEntity.ok(count);
@@ -50,6 +53,7 @@ public class WorkoutController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Отримати тренування по ID")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TRAINER')")
     public ResponseEntity<Workout> getWorkoutById(@PathVariable Long id) {
         Optional<Workout> workout = workoutRepository.findById(id);
         return workout.map(ResponseEntity::ok)
@@ -58,24 +62,28 @@ public class WorkoutController {
 
     @GetMapping("/user/{userId}")
     @Operation(summary = "Отримати тренування користувача")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TRAINER')")
     public List<Workout> getWorkoutsByUser(@PathVariable Long userId) {
         return workoutRepository.findByUserUserId(userId);
     }
 
     @GetMapping("/status/{status}")
     @Operation(summary = "Отримати тренування по статусу")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TRAINER')")
     public List<Workout> getWorkoutsByStatus(@PathVariable Workout.WorkoutStatus status) {
         return workoutRepository.findByStatus(status);
     }
 
     @GetMapping("/duration/{maxDuration}")
     @Operation(summary = "Отримати тренування за тривалістю")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TRAINER')")
     public List<Workout> getWorkoutsByMaxDuration(@PathVariable Integer maxDuration) {
         return workoutRepository.findByDurationLessThanEqual(maxDuration);
     }
 
     @PostMapping
     @Operation(summary = "Створити нове тренування")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TRAINER')")
     public ResponseEntity<Workout> createWorkout(@Valid @RequestBody Workout workout, @RequestParam Long userId) {
         return userRepository.findById(userId)
                 .map(user -> {
@@ -97,6 +105,7 @@ public class WorkoutController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Повністю оновити тренування")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TRAINER')")
     public ResponseEntity<Workout> updateWorkout(@PathVariable Long id, @Valid @RequestBody Workout workoutDetails) {
         return workoutRepository.findById(id)
                 .map(workout -> {
@@ -112,6 +121,7 @@ public class WorkoutController {
 
     @PatchMapping("/{id}/status")
 @Operation(summary = "Оновити статус тренування")
+@PreAuthorize("hasAnyRole('ADMIN', 'TRAINER')")
 public ResponseEntity<Workout> updateWorkoutStatus(@PathVariable Long id, @RequestParam Workout.WorkoutStatus status) {
     return workoutRepository.findById(id)
             .map(workout -> {
@@ -135,6 +145,7 @@ public ResponseEntity<Workout> updateWorkoutStatus(@PathVariable Long id, @Reque
 
     @PostMapping("/{workoutId}/exercises/{exerciseId}")
     @Operation(summary = "Додати вправу до тренування")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TRAINER')")
     public ResponseEntity<Workout> addExerciseToWorkout(@PathVariable Long workoutId, @PathVariable Long exerciseId) {
         Optional<Workout> workoutOpt = workoutRepository.findById(workoutId);
         Optional<Exercise> exerciseOpt = exerciseRepository.findById(exerciseId);
@@ -156,6 +167,7 @@ public ResponseEntity<Workout> updateWorkoutStatus(@PathVariable Long id, @Reque
 
     @DeleteMapping("/{workoutId}/exercises/{exerciseId}")
     @Operation(summary = "Видалити вправу з тренування")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TRAINER')")
     public ResponseEntity<Workout> removeExerciseFromWorkout(@PathVariable Long workoutId, @PathVariable Long exerciseId) {
         Optional<Workout> workoutOpt = workoutRepository.findById(workoutId);
         Optional<Exercise> exerciseOpt = exerciseRepository.findById(exerciseId);
@@ -177,6 +189,7 @@ public ResponseEntity<Workout> updateWorkoutStatus(@PathVariable Long id, @Reque
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Видалити тренування")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TRAINER')")
     public ResponseEntity<Void> deleteWorkout(@PathVariable Long id) {
         return workoutRepository.findById(id)
                 .map(workout -> {
